@@ -1,240 +1,277 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Симулятор многоленточной машины Тьюринга</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Симулятор многоленточной машины Тьюринга</title>
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-    <div class="container">
-        <button class="help-btn tooltip" data-tooltip="Помощь (H)" onclick="showHelp()" id="helpBtn">
-            ?
-        </button>
+  <div class="container">
+    <button class="help-btn tooltip" data-tooltip="Помощь (H)" onclick="showHelp()" id="helpBtn">?</button>
 
-        <header class="header">
-            <div>
-                <h1>Симулятор многоленточной машины Тьюринга</h1>
-                <p style="color: var(--color-text-secondary); margin-top: var(--space-8);">
-                    Интерактивная система для изучения многоленточных машин Тьюринга
-                </p>
-            </div>
-            <div class="status-display" id="globalStatus">
-                Готов к настройке
-            </div>
-        </header>
+    <header class="header">
+      <div>
+        <h1>Симулятор многоленточной машины Тьюринга</h1>
+        <p class="header-subtitle">Интерактивная система для изучения многоленточных машин Тьюринга</p>
+      </div>
+      <div class="status-display" id="globalStatus">Готов к настройке</div>
+    </header>
 
-        <div class="wizard" id="wizard">
-            <div class="wizard-steps">
-                <div class="wizard-step">
-                    <div class="step-circle active" id="step1Circle">1</div>
-                    <div class="step-text active" id="step1Text">Количество лент</div>
-                </div>
-                <div class="wizard-step">
-                    <div class="step-circle" id="step2Circle">2</div>
-                    <div class="step-text" id="step2Text">Выбор программы</div>
-                </div>
-                <div class="wizard-step">
-                    <div class="step-circle" id="step3Circle">3</div>
-                    <div class="step-text" id="step3Text">Настройка данных</div>
-                </div>
-                <div class="wizard-step">
-                    <div class="step-circle" id="step4Circle">4</div>
-                    <div class="step-text" id="step4Text">Симуляция</div>
-                </div>
-            </div>
+    <div class="wizard" id="wizard">
+      <div class="wizard-steps">
+        <div class="wizard-step">
+          <div class="step-circle active" id="step1Circle">1</div>
+          <div class="step-text active" id="step1Text">Количество лент</div>
         </div>
-
-        <div class="card wizard-step-content" id="step1Content">
-            <div class="card__body">
-                <h3 style="margin-bottom: var(--space-16);">Выберите количество лент</h3>
-                <div class="tape-count-selection">
-                    <div class="tape-card" onclick="selectTapeCount(1)" data-count="1">
-                        <div class="tape-number">1</div>
-                        <div>Одна лента</div>
-                        <small style="color: var(--color-text-secondary);">Классическая машина</small>
-                    </div>
-                    <div class="tape-card" onclick="selectTapeCount(2)" data-count="2">
-                        <div class="tape-number">2</div>
-                        <div>Две ленты</div>
-                        <small style="color: var(--color-text-secondary);">Рекомендуется</small>
-                    </div>
-                    <div class="tape-card" onclick="selectTapeCount(3)" data-count="3">
-                        <div class="tape-number">3</div>
-                        <div>Три ленты</div>
-                        <small style="color: var(--color-text-secondary);">Для сложных задач</small>
-                    </div>
-                    <div class="tape-card" onclick="selectTapeCount(4)" data-count="4">
-                        <div class="tape-number">4</div>
-                        <div>Четыре ленты</div>
-                        <small style="color: var(--color-text-secondary);">Экспертный уровень</small>
-                    </div>
-                    <div class="tape-card" onclick="selectTapeCount(5)" data-count="5">
-                        <div class="tape-number">5</div>
-                        <div>Пять лент</div>
-                        <small style="color: var(--color-text-secondary);">Максимум</small>
-                    </div>
-                </div>
-                <div style="text-align: center; margin-top: var(--space-24);">
-                    <button class="btn btn--primary btn--lg" onclick="goToStep(2)" id="step1NextBtn" disabled>
-                        Продолжить →
-                    </button>
-                </div>
-            </div>
+        <div class="wizard-step">
+          <div class="step-circle" id="step2Circle">2</div>
+          <div class="step-text" id="step2Text">Выбор программы</div>
         </div>
-
-        <div class="card wizard-step-content hidden" id="step2Content">
-            <div class="card__body">
-                <h3 style="margin-bottom: var(--space-16);">Выберите программу</h3>
-                <div class="examples-grid" id="examplesGrid"></div>
-                <div style="text-align: center; margin-top: var(--space-24); display: flex; gap: var(--space-12); justify-content: center;">
-                    <button class="btn btn--outline" onclick="goToStep(1)">← Назад</button>
-                    <button class="btn btn--primary btn--lg" onclick="goToStep(3)" id="step2NextBtn" disabled>
-                        Продолжить →
-                    </button>
-                </div>
-            </div>
+        <div class="wizard-step">
+          <div class="step-circle" id="step3Circle">3</div>
+          <div class="step-text" id="step3Text">Настройка данных</div>
         </div>
-
-        <div class="card wizard-step-content hidden" id="step3Content">
-            <div class="card__body">
-                <h3 style="margin-bottom: var(--space-16);">Настройка начальных данных лент</h3>
-                <div id="tapeDataEditor"></div>
-                <div style="text-align: center; margin-top: var(--space-24); display: flex; gap: var(--space-12); justify-content: center;">
-                    <button class="btn btn--outline" onclick="goToStep(2)">← Назад</button>
-                    <button class="btn btn--primary btn--lg" onclick="goToStep(4)">
-                        Начать симуляцию →
-                    </button>
-                </div>
-            </div>
+        <div class="wizard-step">
+          <div class="step-circle" id="step4Circle">4</div>
+          <div class="step-text" id="step4Text">Симуляция</div>
         </div>
-
-        <div class="wizard-step-content hidden" id="step4Content">
-            <div class="controls">
-                <div class="control-group">
-                    <button class="btn btn--primary btn-icon tooltip" data-tooltip="Запуск/Пауза (Space)" onclick="toggleExecution()" id="playBtn">▶️</button>
-                    <button class="btn btn--secondary btn-icon tooltip" data-tooltip="Один шаг (→)" onclick="stepExecution()" id="stepBtn">⏭️</button>
-                    <button class="btn btn--secondary btn-icon tooltip" data-tooltip="Сброс (R)" onclick="resetExecution()" id="resetBtn">🔄</button>
-                </div>
-
-                <div class="control-group">
-                    <label>Скорость:</label>
-                    <select class="form-control" onchange="setSpeed(this.value)" id="speedSelect">
-                        <option value="500">Медленно</option>
-                        <option value="200" selected>Нормально</option>
-                        <option value="50">Быстро</option>
-                    </select>
-                </div>
-
-                <div class="control-group">
-                    <button class="btn btn--outline tooltip" data-tooltip="Показать одноленточную эквивалентность" onclick="showEquivalence()" id="equivalenceBtn">
-                        🔄 Эквивалентность
-                    </button>
-                    <button class="btn btn--outline tooltip" data-tooltip="Показать отладочную информацию" onclick="showDebugInfo()" id="debugBtn">
-                        🔍 Отладка
-                    </button>
-                </div>
-
-                <div class="status-display" id="machineStatus">
-                    Состояние: q0 | Шаг: 0 | Время: 0мс
-                </div>
-            </div>
-
-            <div class="progress-bar" style="margin-bottom: var(--space-16);">
-                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
-            </div>
-
-            <div class="tapes-container" id="tapesContainer"></div>
-
-            <div class="transitions-editor">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-16);">
-                    <h4>Правила переходов</h4>
-                    <button class="btn btn--secondary btn--sm" onclick="addTransition()">
-                        + Добавить правило
-                    </button>
-                </div>
-                <div id="transitionsContainer"></div>
-            </div>
-
-            <div style="text-align: center; margin-top: var(--space-24); display: flex; gap: var(--space-12); justify-content: center;">
-                <button class="btn btn--outline" onclick="goToStep(3)">← Назад к настройке</button>
-                <button class="btn btn--secondary" onclick="saveProgram()">💾 Сохранить программу</button>
-                <button class="btn btn--secondary" onclick="exportLog()">📄 Экспорт журнала</button>
-            </div>
-        </div>
-
-        <div class="modal" id="welcomeModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Добро пожаловать!</h2>
-                    <button class="close-btn" onclick="closeWelcome()">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <p>Добро пожаловать в симулятор многоленточной машины Тьюринга!</p>
-                    <p>Этот инструмент поможет вам изучить принципы работы многоленточных машин Тьюринга и их эквивалентность одноленточным машинам.</p>
-
-                    <h4 style="margin: var(--space-16) 0 var(--space-8) 0;">Быстрый старт:</h4>
-                    <ol>
-                        <li>Выберите количество лент (рекомендуем начать с 2)</li>
-                        <li>Загрузите готовый пример "Копирование строки"</li>
-                        <li>Настройте начальные данные лент</li>
-                        <li>Запустите симуляцию и наблюдайте за процессом</li>
-                    </ol>
-
-                    <div style="text-align: center; margin-top: var(--space-24);">
-                        <button class="btn btn--primary btn--lg" onclick="closeWelcome()">
-                            Начать работу
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal" id="helpModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Руководство пользователя</h2>
-                    <button class="close-btn" onclick="closeHelp()">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="help-nav" id="helpNav">
-                        <button class="help-nav-item active" onclick="showHelpSection('quickStart')">Быстрый старт</button>
-                        <button class="help-nav-item" onclick="showHelpSection('concepts')">Основные понятия</button>
-                        <button class="help-nav-item" onclick="showHelpSection('interface')">Интерфейс</button>
-                        <button class="help-nav-item" onclick="showHelpSection('program')">Создание программы</button>
-                        <button class="help-nav-item" onclick="showHelpSection('simulation')">Симуляция</button>
-                        <button class="help-nav-item" onclick="showHelpSection('equivalence')">Эквивалентность</button>
-                        <button class="help-nav-item" onclick="showHelpSection('examples')">Примеры</button>
-                        <button class="help-nav-item" onclick="showHelpSection('hotkeys')">Горячие клавиши</button>
-                        <button class="help-nav-item" onclick="showHelpSection('faq')">FAQ</button>
-                    </div>
-
-                    <div class="help-content active" id="helpQuickStart">
-                        <h3>Быстрый старт</h3>
-                        <ol>
-                            <li><strong>Выберите количество лент</strong> - рекомендуем начать с 2 лент для изучения основ</li>
-                            <li><strong>Загрузите пример</strong> - выберите "Копирование строки" для первого знакомства</li>
-                            <li><strong>Настройте данные</strong> - измените начальные значения лент при необходимости</li>
-                            <li><strong>Запустите симуляцию</strong> - нажмите кнопку Play и наблюдайте за процессом</li>
-                            <li><strong>Изучите эквивалентность</strong> - посмотрите, как многоленточная машина преобразуется в одноленточную</li>
-                        </ol>
-                    </div>
-
-                    <div class="help-content" id="helpConcepts"><h3>Основные понятия</h3></div>
-                    <div class="help-content" id="helpInterface"><h3>Интерфейс</h3></div>
-                    <div class="help-content" id="helpProgram"><h3>Создание программы</h3></div>
-                    <div class="help-content" id="helpSimulation"><h3>Симуляция</h3></div>
-                    <div class="help-content" id="helpEquivalence"><h3>Эквивалентность</h3></div>
-                    <div class="help-content" id="helpExamples"><h3>Примеры</h3></div>
-                    <div class="help-content" id="helpHotkeys"><h3>Горячие клавиши</h3></div>
-                    <div class="help-content" id="helpFaq"><h3>FAQ</h3></div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
 
-    <div id="notification" class="notification"></div>
+    <div class="card wizard-step-content" id="step1Content">
+      <div class="card__body">
+        <h3 class="section-title">Выберите количество лент</h3>
+        <div class="tape-count-selection">
+          <div class="tape-card" onclick="selectTapeCount(1)" data-count="1">
+            <div class="tape-number">1</div>
+            <div>Одна лента</div>
+            <small class="muted">Классическая машина</small>
+          </div>
+          <div class="tape-card" onclick="selectTapeCount(2)" data-count="2">
+            <div class="tape-number">2</div>
+            <div>Две ленты</div>
+            <small class="muted">Рекомендуется</small>
+          </div>
+          <div class="tape-card" onclick="selectTapeCount(3)" data-count="3">
+            <div class="tape-number">3</div>
+            <div>Три ленты</div>
+            <small class="muted">Для сложных задач</small>
+          </div>
+          <div class="tape-card" onclick="selectTapeCount(4)" data-count="4">
+            <div class="tape-number">4</div>
+            <div>Четыре ленты</div>
+            <small class="muted">Экспертный уровень</small>
+          </div>
+          <div class="tape-card" onclick="selectTapeCount(5)" data-count="5">
+            <div class="tape-number">5</div>
+            <div>Пять лент</div>
+            <small class="muted">Максимум</small>
+          </div>
+        </div>
+        <div class="centered-actions">
+          <button class="btn btn--primary btn--lg" onclick="goToStep(2)" id="step1NextBtn" disabled>Продолжить →</button>
+        </div>
+      </div>
+    </div>
 
-    <script src="script.js"></script>
+    <div class="card wizard-step-content hidden" id="step2Content">
+      <div class="card__body">
+        <h3 class="section-title">Выберите программу</h3>
+        <div class="examples-grid" id="examplesGrid"></div>
+        <div class="centered-actions row-actions">
+          <button class="btn btn--outline" onclick="goToStep(1)">← Назад</button>
+          <button class="btn btn--primary btn--lg" onclick="goToStep(3)" id="step2NextBtn" disabled>Продолжить →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card wizard-step-content hidden" id="step3Content">
+      <div class="card__body">
+        <h3 class="section-title">Настройка начальных данных лент</h3>
+        <div id="tapeDataEditor"></div>
+        <div class="centered-actions row-actions">
+          <button class="btn btn--outline" onclick="goToStep(2)">← Назад</button>
+          <button class="btn btn--primary btn--lg" onclick="goToStep(4)">Начать симуляцию →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="wizard-step-content hidden" id="step4Content">
+      <div class="controls">
+        <div class="control-group">
+          <button class="btn btn--primary btn-icon tooltip" data-tooltip="Запуск/Пауза (Space)" onclick="toggleExecution()" id="playBtn">▶️</button>
+          <button class="btn btn--secondary btn-icon tooltip" data-tooltip="Один шаг (→)" onclick="stepExecution()" id="stepBtn">⏭️</button>
+          <button class="btn btn--secondary btn-icon tooltip" data-tooltip="Сброс (R)" onclick="resetExecution()" id="resetBtn">🔄</button>
+        </div>
+
+        <div class="control-group">
+          <label>Скорость:</label>
+          <select class="form-control" onchange="setSpeed(this.value)" id="speedSelect">
+            <option value="500">Медленно</option>
+            <option value="200" selected>Нормально</option>
+            <option value="50">Быстро</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <button class="btn btn--outline tooltip" data-tooltip="Показать одноленточную эквивалентность" onclick="showEquivalence()" id="equivalenceBtn">🔄 Эквивалентность</button>
+          <button class="btn btn--outline tooltip" data-tooltip="Показать отладочную информацию" onclick="showDebugInfo()" id="debugBtn">🔍 Отладка</button>
+        </div>
+
+        <div class="status-display" id="machineStatus">Состояние: q0 | Шаг: 0 | Время: 0мс</div>
+      </div>
+
+      <div class="progress-bar bottom-space">
+        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+      </div>
+
+      <div class="tapes-container" id="tapesContainer"></div>
+
+      <div class="transitions-editor">
+        <div class="between-row section-head-row">
+          <h4>Правила переходов</h4>
+          <button class="btn btn--secondary btn--sm" onclick="addTransition()">+ Добавить правило</button>
+        </div>
+        <div id="transitionsContainer"></div>
+      </div>
+
+      <div class="centered-actions row-actions">
+        <button class="btn btn--outline" onclick="goToStep(3)">← Назад к настройке</button>
+        <button class="btn btn--secondary" onclick="saveProgram()">💾 Сохранить программу</button>
+        <button class="btn btn--secondary" onclick="exportLog()">📄 Экспорт журнала</button>
+      </div>
+    </div>
+
+    <div class="modal" id="welcomeModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Добро пожаловать!</h2>
+          <button class="close-btn" onclick="closeWelcome()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Добро пожаловать в симулятор многоленточной машины Тьюринга!</p>
+          <p>Этот инструмент поможет изучить принципы работы многоленточных машин Тьюринга и их эквивалентность одноленточным машинам.</p>
+
+          <h4 class="subhead">Быстрый старт:</h4>
+          <ol>
+            <li>Выберите количество лент (рекомендуем начать с 2)</li>
+            <li>Загрузите готовый пример «Копирование строки»</li>
+            <li>Настройте начальные данные лент</li>
+            <li>Запустите симуляцию и наблюдайте за процессом</li>
+          </ol>
+
+          <div class="centered-actions">
+            <button class="btn btn--primary btn--lg" onclick="closeWelcome()">Начать работу</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="helpModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Руководство пользователя</h2>
+          <button class="close-btn" onclick="closeHelp()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="help-nav" id="helpNav">
+            <button class="help-nav-item active" onclick="showHelpSection('quickStart', event)">Быстрый старт</button>
+            <button class="help-nav-item" onclick="showHelpSection('concepts', event)">Основные понятия</button>
+            <button class="help-nav-item" onclick="showHelpSection('interface', event)">Интерфейс</button>
+            <button class="help-nav-item" onclick="showHelpSection('program', event)">Создание программы</button>
+            <button class="help-nav-item" onclick="showHelpSection('simulation', event)">Симуляция</button>
+            <button class="help-nav-item" onclick="showHelpSection('equivalence', event)">Эквивалентность</button>
+            <button class="help-nav-item" onclick="showHelpSection('examples', event)">Примеры</button>
+            <button class="help-nav-item" onclick="showHelpSection('hotkeys', event)">Горячие клавиши</button>
+            <button class="help-nav-item" onclick="showHelpSection('faq', event)">FAQ</button>
+          </div>
+
+          <div class="help-content active" id="helpQuickStart">
+            <h3>Быстрый старт</h3>
+            <ol>
+              <li><strong>Выберите количество лент</strong> — начните с 2 лент для знакомства с моделью.</li>
+              <li><strong>Загрузите пример</strong> — например, «Копирование строки».</li>
+              <li><strong>Настройте данные</strong> — измените начальные символы на лентах.</li>
+              <li><strong>Запустите симуляцию</strong> — используйте Play или Step.</li>
+              <li><strong>Посмотрите эквивалентность</strong> — откройте преобразование в одноленточную машину.</li>
+            </ol>
+          </div>
+
+          <div class="help-content" id="helpConcepts">
+            <h3>Основные понятия</h3>
+            <p><strong>Машина Тьюринга</strong> — абстрактная модель вычислений, состоящая из ленты, головки, состояний и правил переходов.</p>
+            <p><strong>Многоленточная машина</strong> расширяет классическую модель несколькими независимыми лентами, каждая из которых имеет собственную головку чтения/записи.</p>
+            <p><strong>Правило перехода</strong> имеет вид: <code>(состояние, символы) → (новое_состояние, новые_символы, движения)</code>.</p>
+          </div>
+
+          <div class="help-content" id="helpInterface">
+            <h3>Интерфейс</h3>
+            <ul>
+              <li><strong>Play/Pause</strong> — запуск и остановка симуляции.</li>
+              <li><strong>Step</strong> — выполнение одного шага.</li>
+              <li><strong>Reset</strong> — возврат к начальному состоянию.</li>
+              <li><strong>Ленты</strong> — отображают содержимое ячеек и позиции головок.</li>
+              <li><strong>Правила переходов</strong> — интерактивный редактор программы.</li>
+            </ul>
+          </div>
+
+          <div class="help-content" id="helpProgram">
+            <h3>Создание программы</h3>
+            <p>Используйте понятные имена состояний: <code>q0</code>, <code>q1</code>, <code>qf</code>, <code>qaccept</code>, <code>qreject</code>.</p>
+            <p>Для пустой ячейки используйте символ <code>_</code>. Движения головки: <code>L</code>, <code>R</code>, <code>S</code>.</p>
+          </div>
+
+          <div class="help-content" id="helpSimulation">
+            <h3>Симуляция</h3>
+            <p>Можно выполнять программу пошагово или в автоматическом режиме. Активное правило подсвечивается, а изменённые ячейки анимируются.</p>
+          </div>
+
+          <div class="help-content" id="helpEquivalence">
+            <h3>Эквивалентность</h3>
+            <p>Любая многоленточная машина Тьюринга может быть преобразована в эквивалентную одноленточную, хотя время работы обычно возрастает.</p>
+          </div>
+
+          <div class="help-content" id="helpExamples">
+            <h3>Примеры</h3>
+            <ul>
+              <li>Копирование строки</li>
+              <li>Проверка палиндрома</li>
+              <li>Простая замена символов</li>
+            </ul>
+          </div>
+
+          <div class="help-content" id="helpHotkeys">
+            <h3>Горячие клавиши</h3>
+            <div class="hotkeys-grid">
+              <strong>Space</strong><span>Запуск / пауза</span>
+              <strong>→</strong><span>Один шаг</span>
+              <strong>R</strong><span>Сброс</span>
+              <strong>H</strong><span>Помощь</span>
+              <strong>E</strong><span>Эквивалентность</span>
+              <strong>S</strong><span>Сохранение программы</span>
+              <strong>Esc</strong><span>Закрытие модальных окон</span>
+            </div>
+          </div>
+
+          <div class="help-content" id="helpFaq">
+            <h3>FAQ</h3>
+            <h4>Почему машина остановилась?</h4>
+            <p>Скорее всего, нет подходящего правила перехода для текущего состояния и символов под головками.</p>
+            <h4>Как избежать зацикливания?</h4>
+            <p>Добавьте условия перехода в финальные состояния и контролируйте логику возвратов.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="notification" class="notification"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/simulation.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
